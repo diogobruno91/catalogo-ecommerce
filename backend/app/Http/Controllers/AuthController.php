@@ -4,43 +4,76 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-        public function register(Request $request)
-        {
-            $validator = Validator::make($request->all(), [
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
+    /**
+     * Register new user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function register(Request $request)
+    {
+        try {
+            $data = $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
-                'password' => 'required|string|min:8|confirmed',
+                'password' => 'required|string|min:8',
             ]);
     
-            if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 422);
-            }
+            $user = $this->authService->register($data);
     
-            $user = User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-            ]);
-    
-            return response()->json(['message' => 'Usuário registrado com sucesso!'], 201);
-        }
+            return response()->json(['message' => 'Usuário registrado com sucesso!', 'user' => $user], 201);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro na validação dos dados.',
+                'errors' => $e->errors()
+            ], 422);
+        }       
+    }
 
-        public function login(Request $request)
-        {
-            $credentials = $request->only('email', 'password');
+    /**
+     * Login user.
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login(Request $request)
+    {
+        try {
+            $credentials = $request->validate([
+                'email' => 'required|string|email',
+                'password' => 'required|string',
+            ]);
+            
+            $user = $this->authService->login($credentials['email'], $credentials['password']);
     
-            if (Auth::attempt($credentials)) {
-                $user = Auth::user();
+            if ($user) {
+                
                 $token = $user->createToken('AppToken')->plainTextToken;
+                
                 return response()->json(['token' => $token]);
             }
     
             return response()->json(['message' => 'Credenciais inválidas'], 401);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'message' => 'Erro na validação dos dados.',
+                'errors' => $e->errors()
+            ], 422);
         }
+
+    }
 }
