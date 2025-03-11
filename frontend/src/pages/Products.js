@@ -3,7 +3,7 @@ import api from "../api/axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Table, Container, Button, Form, Navbar, Nav } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -181,7 +181,9 @@ const Products = () => {
                      )}
                   </td>
                   <td>
-                    <button className="btn btn-primary btn-sm me-2">Detalhes</button>
+                  <Link to={`/product/${product.id}`} className="btn btn-primary btn-sm">
+                    Detalhes
+                  </Link>
                   </td>
                 </tr>
               ))}
