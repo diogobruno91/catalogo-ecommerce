@@ -24,7 +24,6 @@ const Products = () => {
           Authorization: `Bearer ${getToken()}`,
         },
       });
-      console.log("categorias", response.data);
       
       setCategories(Array.isArray(response.data) ? response.data : []); 
     } catch (error) {
@@ -107,8 +106,7 @@ const Products = () => {
     try {
       const response = await api.get(`/products/category/${category_id}`, {
         headers: { Authorization: `Bearer ${token}` },
-      });   
-      console.log("categorias", response.data.data);
+      });
          
       setProducts(response.data.data);
     } catch (error) {        

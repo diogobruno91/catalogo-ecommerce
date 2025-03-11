@@ -18,7 +18,6 @@ const ProductDetails = () => {
           Authorization: `Bearer ${getToken()}`,
         },
       });
-      console.log(response.data);
       
       setProduct(response.data);
     } catch (error) {
@@ -35,6 +34,7 @@ const ProductDetails = () => {
 
   return (
     <Container className="mt-5">
+        <h1 className="text-center mb-4 mt-5 pt-5">Detalhes</h1>
       <Card className="p-4 shadow">
         <Card.Body>
           <Card.Text>
@@ -44,7 +44,7 @@ const ProductDetails = () => {
             <strong>Cor:</strong> {product.color ? product.color : "N/A"}
           </Card.Text>
           <Card.Text>
-            <strong>Tamanho:</strong> R$ {product.size ? product.size : "N/A"}
+            <strong>Tamanho:</strong> {product.size ? product.size : "N/A"}
           </Card.Text>
           <Button variant="secondary" onClick={() => navigate(-1)}>
             Voltar
