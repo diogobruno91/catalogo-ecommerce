@@ -33,6 +33,11 @@ class ProductController extends Controller
         return response()->json($this->productService->findByCategory($categoryId));
     }
 
+    public function filterByDetail($detailID)
+    {
+        return response()->json($this->productService->findByDetail($detailID));
+    }
+
     public function search(Request $request)
     {
         $query = $request->query('query');

@@ -21,6 +21,11 @@ class ProductRepository
         return Product::where('category_id', $categoryId)->paginate(10);
     }
 
+    public function getByDetail($detailId)
+    {
+        return Product::where('detail_id', $detailId)->paginate(10);
+    }
+
     public function search($query)
     {
         return Product::where('name', 'LIKE', "%$query%")

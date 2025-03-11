@@ -28,6 +28,11 @@ class ProductService
         return $this->productRepository->getByCategory($categoryId);
     }
 
+    public function findByDetail($categoryId)
+    {
+        return $this->productRepository->getByDetail($categoryId);
+    }
+
     public function searchProducts($query)
     {
         return $this->productRepository->search($query);
