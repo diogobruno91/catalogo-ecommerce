@@ -5,7 +5,7 @@ import { Container, Button, Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 const ProductDetails = () => {
-  const { id } = useParams();
+  const { details_id } = useParams();
   const [product, setProduct] = useState(null);
   const navigate = useNavigate();
 
@@ -13,11 +13,13 @@ const ProductDetails = () => {
 
   const fetchProductDetails = async () => {
     try {
-      const response = await api.get(`/details/${id}`, {
+      const response = await api.get(`/details/${details_id}`, {
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
       });
+      
+      console.log(response.data);
       
       setProduct(response.data);
     } catch (error) {
@@ -28,7 +30,7 @@ const ProductDetails = () => {
 
   useEffect(() => {
     fetchProductDetails();
-  }, [id]);
+  }, [details_id]);
 
   if (!product) return <p className="text-center">Carregando detalhes...</p>;
 
@@ -38,7 +40,7 @@ const ProductDetails = () => {
       <Card className="p-4 shadow">
         <Card.Body>
           <Card.Text>
-            <strong>Descrição:</strong> {product.description ? product.description : "N/A"}
+            <strong>Descrição:</strong> {product.details ? product.details : "N/A"}
           </Card.Text>
           <Card.Text>
             <strong>Cor:</strong> {product.color ? product.color : "N/A"}

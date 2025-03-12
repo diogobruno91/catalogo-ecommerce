@@ -179,7 +179,7 @@ const Products = () => {
                      )}
                   </td>
                   <td>
-                  <Link to={`/product/${product.id}`} className="btn btn-primary btn-sm">
+                  <Link to={`/product/${product.detail_id}`} className="btn btn-primary btn-sm">
                     Detalhes
                   </Link>
                   </td>

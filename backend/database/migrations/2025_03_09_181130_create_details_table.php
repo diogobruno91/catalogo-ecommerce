@@ -11,8 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->foreignId('detail_id')->after('category_id')->nullable()->constrained('details')->onDelete('cascade');
+        Schema::create('details', function (Blueprint $table) {
+            $table->id();
+            $table->string('color')->nullable();
+            $table->string('size')->nullable();
+            $table->text('details')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -21,8 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('products', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('details');
     }
 };
