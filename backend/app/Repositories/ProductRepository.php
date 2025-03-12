@@ -2,13 +2,15 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\ProductCollection;
 use App\Models\Product;
 
 class ProductRepository
 {
     public function getAll($perPage = 10)
     {
-        return Product::paginate($perPage);
+        $products = Product::paginate($perPage);
+        return new ProductCollection($products);
     }
 
     public function getById($id)
@@ -18,18 +20,22 @@ class ProductRepository
 
     public function getByCategory($categoryId)
     {
-        return Product::where('category_id', $categoryId)->paginate(10);
+        $products = Product::where('category_id', $categoryId)->paginate(10);
+        return new ProductCollection($products);
     }
 
     public function getByDetail($detailId)
     {
-        return Product::where('detail_id', $detailId)->paginate(10);
+        $products = Product::where('detail_id', $detailId)->paginate(10);
+        return new ProductCollection($products);
     }
 
     public function search($query)
     {
-        return Product::where('name', 'LIKE', "%$query%")
-                      ->orWhere('description', 'LIKE', "%$query%")
-                      ->paginate(10);
+        $products = Product::where('name', 'LIKE', "%$query%")
+                           ->orWhere('description', 'LIKE', "%$query%")
+                           ->paginate(10);
+                           
+        return new ProductCollection($products);
     }
 }

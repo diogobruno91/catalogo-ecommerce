@@ -38,9 +38,9 @@ const Products = () => {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
-        });     
+        });
         setProducts(response.data.data);
-        setTotalPages(response.data.last_page);
+        setTotalPages(response.data.meta.pagination.last_page);
     } catch (error) {
         console.error("Erro ao buscar produtos:", error);
         toast.error("Erro ao buscar produtos.");
@@ -104,11 +104,12 @@ const Products = () => {
 
     const token = getToken();
     try {
-      const response = await api.get(`/products/category/${category_id}`, {
+      const response = await api.get(`/products/category/${category_id}?page=${currentPage}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-         
+      
       setProducts(response.data.data);
+      setTotalPages(response.data.meta.pagination.last_page);
     } catch (error) {        
       console.error("Erro ao buscar produtos:", error);
       toast.error("Erro ao buscar produtos.");

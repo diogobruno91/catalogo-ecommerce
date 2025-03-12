@@ -2,12 +2,14 @@
 
 namespace App\Repositories;
 
+use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 
 class CategoryRepository
 {
     public function getAllCategories()
     {
-        return Category::all();
+        $categories = Category::all();
+        return CategoryResource::collection($categories);
     }
 }
