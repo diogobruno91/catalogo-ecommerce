@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/axios";
+import { getDetails } from "../services/detailsService";
 import { Container, Button, Card } from "react-bootstrap";
 import { toast } from "react-toastify";
 
@@ -13,17 +13,9 @@ const ProductDetails = () => {
 
   const fetchProductDetails = async () => {
     try {
-      const response = await api.get(`/details/${details_id}`, {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      });
-      
-      console.log(response.data);
-      
+      const response = await getDetails(details_id, getToken());
       setProduct(response.data);
     } catch (error) {
-      console.error("Erro ao buscar detalhes do produto:", error);
       toast.error("Erro ao carregar detalhes do produto.");
     }
   };

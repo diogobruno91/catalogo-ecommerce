@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "../api/axios";
+import { register } from "../services/authService"
 import { useNavigate } from "react-router-dom";
 import { Form, Button, Container, Alert, Card } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify";
@@ -15,14 +15,13 @@ const Register = () => {
     e.preventDefault();
     
     try {
-      await api.post("/register", { name, email, password });
+      await register(name, email, password);
       toast.success("Usuário cadastrado com sucesso! 🎉", { autoClose: 3000 });
       setTimeout(() => navigate("/"), 2500);
     } catch (err) {
       if (err.response && err.response.data.errors) {
         const errors = err.response.data.errors;
         
-        // Percorre os erros e exibe cada um como um toast
         Object.values(errors).forEach((errorArray) => {
           errorArray.forEach((errorMessage) => {
             toast.error(errorMessage);

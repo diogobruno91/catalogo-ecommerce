@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import api from "../api/axios";
+import { login } from "../services/authService";
 import { Form, Button, Container, Alert, Card } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify"
 
@@ -13,7 +13,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post("/login", { email, password });
+      const response = await login(email, password);
       localStorage.setItem("token", response.data.token);
       navigate("/products");
     } catch (err) {

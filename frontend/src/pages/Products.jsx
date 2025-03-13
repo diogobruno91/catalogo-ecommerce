@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../api/axios";
+import { getCategories } from "../services/categoriesService";
+import { getProducts, searchProducts, getProductsByCategory } from "../services/productsService";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Table, Container, Button, Form, Navbar, Nav } from "react-bootstrap";
 import { toast, ToastContainer } from "react-toastify"
@@ -19,35 +20,24 @@ const Products = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get("/categories", {
-        headers: {
-          Authorization: `Bearer ${getToken()}`,
-        },
-      });
-      
+      const response = await getCategories(getToken());      
       setCategories(Array.isArray(response.data) ? response.data : []); 
     } catch (error) {
-      console.error("Erro ao buscar categorias:", error);
+      toast.error("Erro ao buscar categorias.");
     }
   };
 
   const fetchProducts = async () => {
-    const token = getToken();
     try {
-        const response = await api.get(`/products?page=${currentPage}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
+        const response = await getProducts(currentPage, getToken());
         setProducts(response.data.data);
         setTotalPages(response.data.meta.pagination.last_page);
     } catch (error) {
-        console.error("Erro ao buscar produtos:", error);
         toast.error("Erro ao buscar produtos.");
     } finally {
         setLoading(false);
     }
-};
+  };
 
   useEffect(() => {
     const token = getToken();
@@ -69,14 +59,10 @@ const Products = () => {
       return;
     }
 
-    const token = getToken();
     try {
-      const response = await api.get(`/products/search?query=${query}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });      
+      const response = await searchProducts(query, getToken());      
       setProducts(response.data.data);
-    } catch (error) {        
-      console.error("Erro ao buscar produtos:", error);
+    } catch (error) {
       toast.error("Erro ao buscar produtos.");
     }
   };
@@ -102,16 +88,11 @@ const Products = () => {
       return;
     }
 
-    const token = getToken();
     try {
-      const response = await api.get(`/products/category/${category_id}?page=${currentPage}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      
+      const response = await getProductsByCategory(category_id, currentPage, getToken());      
       setProducts(response.data.data);
       setTotalPages(response.data.meta.pagination.last_page);
-    } catch (error) {        
-      console.error("Erro ao buscar produtos:", error);
+    } catch (error) {
       toast.error("Erro ao buscar produtos.");
     }
   };
