@@ -52,4 +52,5 @@ docker-compose exec backend php artisan migrate --seed
 Abra o navegador e acesse http://localhost:3000 para visualizar o frontend React.
 
 ### 5. Acessando o Backend (API)
-Você pode testar a API diretamente no backend, que estará disponível em http://localhost:8080. A documentação das rotas da API pode ser encontrada no código ou em ferramentas como o Postman.
+Você pode testar a API diretamente no backend, que estará disponível em http://localhost:8080. 
+A documentação das rotas da API pode ser encontrada em https://app.swaggerhub.com/apis/exata-de5/ecommerce/1.0.0
